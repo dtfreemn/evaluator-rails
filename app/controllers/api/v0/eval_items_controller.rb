@@ -4,7 +4,7 @@ class Api::V0::EvalItemsController < ApplicationController
     eval_items = EvalItem.all
     render json: eval_items
   end
-
+  
   def create
     eval_item = EvalItem.new(eval_item_params)
     if eval_item.save
