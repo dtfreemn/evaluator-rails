@@ -7,7 +7,7 @@ class Api::V0::ScoresController < ApplicationController
   def create
     score = Score.new(score_params)
     if score.save
-      render json: score
+      render json: score.user
     else
       render json: {error: 'nope'}
     end

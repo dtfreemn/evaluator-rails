@@ -1,8 +1,8 @@
 class Api::V0::UsersController < ApplicationController
     
   def index
-    users = User.all.order(:last_name)
-    render json: users
+    users = User.include_all.all.order(:last_name)
+    render json: users.as_json(include_hash)
   end
 
   def create
@@ -29,6 +29,12 @@ class Api::V0::UsersController < ApplicationController
 
   def user_params
     params.require(:user).permit(:first_name, :last_name, :email, :admin)
+  end
+
+  def include_hash
+    {
+      :include => [:scores => {:include => :eval_item}]
+    }
   end
 
 end
