@@ -15,14 +15,14 @@ class Api::V0::UsersController < ApplicationController
   end
 
   def show
-    user = User.find_by(id: params[:id])
-    render json: user
+    user = User.include_all.find_by(id: params[:id])
+    render json: user.as_json(include_hash)
   end
 
   def destroy
     user = User.find_by(id: params[:id])
     user.destroy
-    render json: User.all.order(:last_name)
+    render json: User.include_all.all.order(:last_name).as_json(include_hash)
   end
 
   private
@@ -33,7 +33,7 @@ class Api::V0::UsersController < ApplicationController
 
   def include_hash
     {
-      :include => [:scores => {:include => :eval_item}]
+      :include => [:scores => {:include => [:eval_item, :admin]}]
     }
   end
 
