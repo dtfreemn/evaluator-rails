@@ -1,3 +1,3 @@
 class ScoreSerializer < ActiveModel::Serializer
-  attributes :id, :eval_item, :score, :admin, :user
+  attributes :id, :eval_item, :score, :administrator, :user
 end

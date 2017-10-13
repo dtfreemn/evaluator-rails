@@ -5,7 +5,9 @@ class Api::V0::ScoresController < ApplicationController
   end
   
   def create
+    admin = Administrator.find_by(id: decoded_token[0]['administrator_id'])
     score = Score.new(score_params)
+    score.administrator = admin
     if score.save
       render json: score
     else
@@ -21,7 +23,7 @@ class Api::V0::ScoresController < ApplicationController
   private
 
   def score_params
-    params.permit(:score, :admin_id, :user_id, :eval_item_id)
+    params.permit(:score, :user_id, :eval_item_id)
   end
 
 end

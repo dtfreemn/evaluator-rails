@@ -3,5 +3,5 @@ class User < ApplicationRecord
   has_many :eval_items, through: :scores
   belongs_to :organization
 
-  scope :include_all, -> {includes(:scores => [:eval_item, :admin])}
+  scope :include_all, -> {includes(:scores => [:eval_item, :administrator])}
 end

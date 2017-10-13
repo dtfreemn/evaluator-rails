@@ -1,14 +1,17 @@
 class Api::V0::UsersController < ApplicationController
     
   def index
-    users = User.include_all.all.order(:last_name)
+    admin = Administrator.find_by(id: decoded_token[0]['administrator_id'])
+    users = User.include_all.where(organization_id: admin.organization.id).order(:last_name)
     render json: users.as_json(include_hash)
   end
 
   def create
+    admin = Administrator.find_by(id: decoded_token[0]['administrator_id'])
     user = User.new(user_params)
+    user.organization = admin.organization
     if user.save
-      render json: User.all.order(:last_name)
+      render json: User.include_all.where(organization_id: admin.organization.id).order(:last_name)
     else
       render json: {error: 'nope'}
     end
@@ -20,9 +23,10 @@ class Api::V0::UsersController < ApplicationController
   end
 
   def destroy
+    admin = Administrator.find_by(id: decoded_token[0]['administrator_id'])
     user = User.find_by(id: params[:id])
     user.destroy
-    render json: User.include_all.all.order(:last_name).as_json(include_hash)
+    render json: User.include_all.where(organization_id: admin.organization.id).order(:last_name).as_json(include_hash)
   end
 
   private
@@ -33,7 +37,7 @@ class Api::V0::UsersController < ApplicationController
 
   def include_hash
     {
-      :include => [:scores => {:include => [:eval_item, :admin]}]
+      :include => [:scores => {:include => [:eval_item, :administrator]}]
     }
   end
 
