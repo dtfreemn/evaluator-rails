@@ -11,7 +11,7 @@ class Api::V0::EvalItemsController < ApplicationController
     eval_item = EvalItem.new(eval_item_params)
     eval_item.organization = admin.organization
     if eval_item.save
-      render json: EvalItem.all
+      render json: EvalItem.where(organization_id: admin.organization.id)
     else
       render json: {error: 'nope'}
     end
