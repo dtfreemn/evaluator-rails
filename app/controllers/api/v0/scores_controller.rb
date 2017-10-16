@@ -23,7 +23,7 @@ class Api::V0::ScoresController < ApplicationController
   private
 
   def score_params
-    params.permit(:score, :user_id, :eval_item_id)
+    params.permit(:score, :user_id, :eval_item_id, :note)
   end
 
 end

@@ -13,7 +13,7 @@ class Api::V0::UsersController < ApplicationController
     if user.save
       render json: User.include_all.where(organization_id: admin.organization.id).order(:last_name)
     else
-      render json: {error: 'nope'}
+      render json: {error: 'Could not save new employee'}
     end
   end
 
@@ -29,6 +29,17 @@ class Api::V0::UsersController < ApplicationController
     render json: User.include_all.where(organization_id: admin.organization.id).order(:last_name).as_json(include_hash)
   end
 
+  def update
+    admin = Administrator.find_by(id: decoded_token[0]['administrator_id'])
+    if admin
+      user = User.find_by(id: params[:id])
+      user.update(user_params)
+      render json: User.include_all.where(organization_id: admin.organization.id).order(:last_name).as_json(include_hash)
+    else
+      render json: {error: 'Could not update user'}
+    end
+  end
+
   private
 
   def user_params
@@ -37,7 +48,8 @@ class Api::V0::UsersController < ApplicationController
 
   def include_hash
     {
-      :include => [:scores => {:include => [:eval_item, :administrator]}]
+      :include => [{:scores => {:include => [:eval_item, :administrator]}}, {:action_steps => {
+        :include => :administrator}}]
     }
   end
 
