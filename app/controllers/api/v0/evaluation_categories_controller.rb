@@ -11,6 +11,11 @@ class Api::V0::EvaluationCategoriesController < ApplicationController
     end
   end
 
+  def index
+    admin = Administrator.find_by(id: decoded_token[0]['administrator_id'])
+    render json: EvaluationCategory.where(organization_id: admin.organization_id)
+  end
+
 
   private
 
