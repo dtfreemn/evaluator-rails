@@ -29,6 +29,17 @@ class Api::V0::EvalItemsController < ApplicationController
     render json: EvalItem.where(organization_id: admin.organization.id)
   end
 
+  def update
+    admin = Administrator.find_by(id: decoded_token[0]['administrator_id'])
+    if admin
+      eval_item = EvalItem.find_by(id: params[:id])
+      eval_item.update(eval_item_params)
+      render json: EvalItem.where(organization_id: admin.organization.id)
+    else
+      render json: {error: 'Attempt to edit was unsuccessful'}
+    end
+  end
+
 
   private
 
