@@ -22,6 +22,16 @@ class Api::V0::EvalItemsController < ApplicationController
     render json: eval_item
   end
 
+  def update
+    admin = Administrator.find_by(id: decoded_token[0]['administrator_id'])
+    eval_item = EvalItem.find_by(id: params[:id])
+    if eval_item.update(eval_item_params)
+      render json: EvalItem.where(organization_id: admin.organization.id)
+    else
+      render json: {error: 'Update of evaluation item failed'}
+    end
+  end
+
   def destroy
     admin = Administrator.find_by(id: decoded_token[0]['administrator_id'])
     eval_item = EvalItem.find_by(id: params[:id])
