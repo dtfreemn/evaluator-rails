@@ -6,6 +6,8 @@ Rails.application.routes.draw do
       resources :eval_items, only: [:create, :show, :index, :destroy, :update]
       resources :scores, only: [:create, :show, :index]
       resources :action_steps, only: [:create]
+      resources :evaluation_categories, only: [:create, :index, :update]
+      resources :possible_points, only: [:create, :update]
       post '/login', to: 'auth#create'
     end
   end

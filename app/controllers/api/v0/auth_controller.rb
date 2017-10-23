@@ -14,7 +14,7 @@ class Api::V0::AuthController < ApplicationController
 
   def include_hash
     {
-      :include => [:organization]
+      :include => [{:organization => {:include => [:evaluation_categories]}}]
     }
   end
 
