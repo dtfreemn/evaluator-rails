@@ -2,7 +2,7 @@ class Api::V0::EvalItemsController < ApplicationController
 
   def index
     admin = Administrator.find_by(id: decoded_token[0]['administrator_id'])
-    eval_items = EvalItem.where(organization_id: admin.organization.id).order(:evaluation_category_id)
+    eval_items = EvalItem.where(organization_id: admin.organization.id).order(:evaluation_category_id).as_json(include_hash)
     render json: eval_items
   end
   
@@ -44,6 +44,12 @@ class Api::V0::EvalItemsController < ApplicationController
 
   def eval_item_params
     params.require(:eval_item).permit(:name, :description, :evaluation_category_id)
+  end
+
+  def include_hash
+    {
+      :include => [:evaluation_category => {:include => [:possible_points]}]
+    }
   end
 
 end
