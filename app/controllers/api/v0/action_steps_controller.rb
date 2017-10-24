@@ -11,10 +11,19 @@ class Api::V0::ActionStepsController < ApplicationController
     end
   end
 
+  def update
+    action_step = ActionStep.find_by(id: params[:id])
+    if action_step.update(action_step_params)
+      render json: {step: action_step, status: action_step.completed}
+    else
+      render json: {error: 'Unable to update action step'}
+    end
+  end
+
   private
 
   def action_step_params
-    params.permit(:user_id, :description)
+    params.permit(:user_id, :description, :completed)
   end
 
 end

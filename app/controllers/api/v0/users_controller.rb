@@ -3,7 +3,7 @@ class Api::V0::UsersController < ApplicationController
   def index
     admin = Administrator.find_by(id: decoded_token[0]['administrator_id'])
     users = User.include_all.where(organization_id: admin.organization.id).order(:last_name)
-    render json: users.as_json(include_hash)
+    render json: users.as_json(user_include_hash)
   end
 
   def create
@@ -19,14 +19,14 @@ class Api::V0::UsersController < ApplicationController
 
   def show
     user = User.include_all.find_by(id: params[:id])
-    render json: user.as_json(include_hash)
+    render json: user.as_json(user_include_hash)
   end
 
   def destroy
     admin = Administrator.find_by(id: decoded_token[0]['administrator_id'])
     user = User.find_by(id: params[:id])
     user.destroy
-    render json: User.include_all.where(organization_id: admin.organization.id).order(:last_name).as_json(include_hash)
+    render json: User.include_all.where(organization_id: admin.organization.id).order(:last_name).as_json(user_include_hash)
   end
 
   def update
@@ -34,7 +34,7 @@ class Api::V0::UsersController < ApplicationController
     if admin
       user = User.find_by(id: params[:id])
       user.update(user_params)
-      render json: User.include_all.where(organization_id: admin.organization.id).order(:last_name).as_json(include_hash)
+      render json: User.include_all.where(organization_id: admin.organization.id).order(:last_name).as_json(user_include_hash)
     else
       render json: {error: 'Could not update user'}
     end
@@ -46,9 +46,9 @@ class Api::V0::UsersController < ApplicationController
     params.require(:user).permit(:first_name, :last_name, :email, :admin)
   end
 
-  def include_hash
+  def user_include_hash
     {
-      :include => [{:scores => {:include => [:eval_item, :administrator]}}, {:action_steps => {
+      :include => [{:scores => {:include => [{:eval_item => {:include => [:evaluation_category]}}, :administrator]}}, {:action_steps => {
         :include => :administrator}}]
     }
   end
