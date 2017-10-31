@@ -13,8 +13,5 @@ alt="eVALUEate demo video" width="240" height="180" border="10" /></a>
   ### Backend Dependencies for eVALUEate
     - Ruby 2.3.1
     - Postgres</br>
-    *All others can be handled by running
-    ```ruby
-    bundle install
-    ```
+    *All others can be handled by running bundle install
 
