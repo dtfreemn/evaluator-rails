@@ -13,7 +13,7 @@ alt="eVALUEate demo video" width="240" height="180" border="10" /></a>
 ### Instructions to run on your machine
   eVALUEate is not currently deployed to the web. To run the backend on your machine you should:
   - clone this repository and run 'bundle install'
-  - create a .env in the top level folder and create a variable called JWT_SECRET that is equal to anything you'd like
+  - create a .env file in the top level folder and create a variable called JWT_SECRET that is equal to anything you'd like
   - turn on your Postgres database
   - run 'rails s' </br>
   *NOTE: You will need to seed your database with at least one Administrator so that you can log in and begin creating*
