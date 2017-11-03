@@ -3,11 +3,7 @@ class Api::V0::UsersController < ApplicationController
   def index
     admin = Administrator.find_by(id: decoded_token[0]['administrator_id'])
     users = User.include_all.where(organization_id: admin.organization.id).order(:last_name)
-    if users.length > 0
-      render json: users.as_json(user_include_hash)
-    else
-      render json: "There are no users"
-    end
+    render json: users.as_json(user_include_hash)
   end
 
   def create
